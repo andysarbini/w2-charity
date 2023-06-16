@@ -29,7 +29,9 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            // 'password' => '$2y$10$mB3/6qODz0zJ5JnzWFi7bu6ihm59SOE73u2P8l0znehvRZ4q9NxhG', // 12345678
             'remember_token' => Str::random(10),
+            'role_id' => 2
         ];
     }
 

@@ -44,7 +44,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="pages/mailbox/mailbox.html" class="nav-link">
+                    <a href="{{ route('category.index')}}" class="nav-link">
                       <i class="nav-icon fas fa-cube"></i>
                       <p>Kategori</p>
                     </a>

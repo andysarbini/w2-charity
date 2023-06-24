@@ -26,7 +26,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link active">
+            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('dashboard*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard                
@@ -44,7 +44,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ route('category.index')}}" class="nav-link">
+                    <a href="{{ route('category.index')}}" class="nav-link {{ request()->is('category*') ? 'active' : ''}}">
                       <i class="nav-icon fas fa-cube"></i>
                       <p>Kategori</p>
                     </a>

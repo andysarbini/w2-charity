@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -55,4 +56,5 @@ Route::group(['middleware' => ['role:admin,donatur']], function () {
         'middleware' => 'role:admin'
     ], function() {
         Route::resource('/category', CategoryController::class);
+        Route::resource('/campaign', CampaignController::class);
     });

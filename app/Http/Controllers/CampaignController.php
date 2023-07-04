@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CampaignController extends Controller
 {
@@ -14,7 +16,9 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        return view('campaign.index');
+        $category = Category::orderBy('name')->get()->pluck('name', 'id');
+
+        return view('campaign.index', compact('category'));
     }
 
     /**
@@ -35,7 +39,23 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|min:8',
+            'categories' => 'required|array',
+            'short_description' => 'required',
+            'body' => 'required|min:8',
+            'publish_date' => 'required|date_format:Y-m-d H:i',
+            'goal' => 'required|integer',
+            'end_date' => 'required|date_format:Y-m-d H:i',
+            'note' => 'nullable',
+            'receiver' => 'required',
+            'path_image' => 'required|mimes:png, jpg, jpeg|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
     }
 
     /**

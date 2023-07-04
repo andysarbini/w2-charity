@@ -1,7 +1,7 @@
 @push('scripts')
     @if (session()->has('success'))
     <script>
-            $(document).Toasts('create', {
+        $(document).Toasts('create', {
             class: 'bg-success',
             title: 'Success',
             body: '{{ session('message') }}'

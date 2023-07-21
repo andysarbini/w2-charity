@@ -12,7 +12,7 @@
 
         <x-card>
           <x-slot name="header">
-            <button onclick="addForm(`{{ route('campaign.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
+            <button onclick="addForm(`{{ route('campaignn.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
           </x-slot>
 
           {{-- <form class="d-flex justify-content-between">
@@ -23,12 +23,12 @@
           <x-table>
             <x-slot name="thead">
               <th width="5%">No</th>
-              <th></th>
+              <th width="20%"></th>
               <th>Deskripsi</th>
               <th>Tgl. Publish</th>
               <th>Status</th>
               <th>Author</th>
-              <th width="15%"><div class="fas fa-cog"></div></th>
+              <th width="15%"><i class="fas fa-cog"></i></th>
             </x-slot>
 
               
@@ -58,7 +58,22 @@
         let modal = '#modal-form';
         let table;
 
-        $('.table').DataTable();
+        table = $('.table').DataTable({
+          processing: true,
+          autoWidth: false,
+          ajax: {
+            url: '{{ route('campaign.data') }}'
+          },
+          columns: [
+            {data: 'DT_RowIndex', searchable: false, sortable: false},
+            {data: 'path_image', searchable: false, sortable: false},
+            {data: 'short_description'},
+            {data: 'publish_date', searchable: false},
+            {data: 'status', searchable: false, sortable: false},
+            {data: 'author', searchable: false},
+            {data: 'actions', searchable: false, sortable: false},
+          ]
+        });
         
       function addForm(url, title = 'Tambah') {
         $(modal).modal('show');
@@ -74,9 +89,20 @@
               $(modal).modal('show');
               $(`${modal} .modal-title`).text(title);
               $(`${modal} form`).attr('action', url);
-
+              $(`${modal} [name=_method]`).val('put');
+   
               resetForm(`${modal} form`);
-              loopForm(response.data)
+              loopForm(response.data);
+
+              let selectedCategories = [];
+              response.data.categories.forEach(item => {
+                selectedCategories.push(item.id);
+              });
+
+              $('#categories')
+                .val(selectedCategories)
+                .trigger('change');
+              // $(`[name=receiver]`).filter(`[value="${response.data.receiver}"]`).attr('checked', true);
             })
             .fail(errors => {
               alert('Tidak dapat menampilkan data');
@@ -109,7 +135,7 @@
       }
 
       function deleteData(url) {
-        if (config('Yakin data akan dihapus')) {
+        if (confirm('Yakin data akan dihapus')) {
           $.post(url, {
             '_method': 'delete'
           })
@@ -137,10 +163,17 @@
           if ($(`[name=${field}]`).attr('type') != 'file') {
             if ($(`[name=${field}]`).hasClass('summernote')) {
                 $(`[name=${field}]`).summernote('code', originalForm[field]);
+            } else if ($(`[name=${field}]`).attr('type') == 'radio') {
+              $(`[name=${field}]`).filter(`[value="${originalForm[field]}"]`).prop('checked', true);
+            } else {
+              $(`[name=${field}`).val(originalForm[field]);
             }
 
-            $(`[name=${field}]`).val(originalForm[field]);
             $('select').trigger('change');
+          } else {
+            $(`.preview-${field}`)
+                .attr('src', originalForm[field])
+                .show();
           }
         }
       }

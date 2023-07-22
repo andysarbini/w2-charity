@@ -15,10 +15,37 @@
             <button onclick="addForm(`{{ route('campaignn.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
           </x-slot>
 
-          {{-- <form class="d-flex justify-content-between">
-            <x-dropdown-table />
-            <x-filter-table />
-          </form> --}}
+          <div class="d-flex justify-content-between">
+            <div class="form-group">
+              <label for="status2">Status</label>
+              <select name="status2" id="status2" class="custom-select">
+                  <option disabled selected>Pilih salah satu</option>
+                  <option value="Publish">Publish</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Archived">Archived</option>
+              </select>
+            </div>
+            <div class="d-flex">
+              <div class="form-group mx-3">
+                <label for="start_date2">Tanggal Awal:</label>
+                <div class="input-group datepicker" id="start_date2" data-target-input="nearest">
+                    <input type="text" name="start_date2" class="form-control datetimepicker-input" data-target="#start_date2"/>
+                    <div class="input-group-append" data-target="#start_date2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="end_date2">Tanggal Akhir:</label>
+                <div class="input-group datepicker" id="end_date2" data-target-input="nearest">
+                    <input type="text" name="end_date2" class="form-control datetimepicker-input" data-target="#end_date2"/>
+                    <div class="input-group-append" data-target="#end_date2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <x-table>
             <x-slot name="thead">
@@ -62,7 +89,12 @@
           processing: true,
           autoWidth: false,
           ajax: {
-            url: '{{ route('campaign.data') }}'
+            url: '{{ route('campaign.data') }}',
+            data: function (d) {
+              d.status = $('[name=status2]').val();
+              d.start_date = $('[name=start_date2]').val();
+              d.end_date = $('[name=end_date2]').val();
+            }
           },
           columns: [
             {data: 'DT_RowIndex', searchable: false, sortable: false},
@@ -74,6 +106,14 @@
             {data: 'actions', searchable: false, sortable: false},
           ]
         });
+
+      $('[name=status2]').on('change', function () {
+        table.ajax.reload();
+      });
+
+      $('.datepicker').on('change.datetimepicker', function () {
+        table.ajax.reload();
+      });
         
       function addForm(url, title = 'Tambah') {
         $(modal).modal('show');
@@ -154,7 +194,7 @@
         $(selector)[0].reset();
 
         $('.select2').trigger('change');
-        $('.form-control, .custom-select, .custom-checkbox, .custom-radio, .select2').removeClass('is_invalid');
+        $('.form-control, .custom-select, .custom-checkbox, .custom-radio, .select2, .note-editor').removeClass('is_invalid');
         $('.invalid-feedback').remove();
       }
 
@@ -192,17 +232,22 @@
             $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
                 .insertAfter($(`[name=${error}]`).next());
           } else if ($(`[name=${error}]`).hasClass('summernote')) {
+            $('.note-editor').addClass('is-invalid');
             $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
                 .insertAfter($(`[name=${error}]`).next());
           } else if ($(`[name=${error}]`).hasClass('custom-control-input')) {
             $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
                 .insertAfter($(`[name=${error}]`).next());
           } else {
-            $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
-                .insertAfter($(`[name=${error}]`));
-          }
-                      
-         
+            if ($(`[name=${error}]`).length ==0) {
+                $(`[name="${error}[]"]`).addClass('is-invalid');
+                $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
+                    .insertAfter($(`[name="${error}[]"]`).next());
+            } else {  
+              $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
+                  .insertAfter($(`[name=${error}]`));
+            }
+          }                           
         }
       }
 

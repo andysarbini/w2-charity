@@ -58,9 +58,9 @@ Route::group(['middleware' => ['role:admin,donatur']], function () {
         Route::resource('/category', CategoryController::class);
         
         Route::get('/campaign/data', [CampaignController::class, 'data'])->name('campaign.data');
-        // Route::resource('/campaignn', CampaignController::class)->except('create', 'edit');
-        // Route::resource('/kampanye', CampaignController::class);
-        Route::resource('/campaignn', CampaignController::class);
+        Route::get('/campaign/detail/{id}', [CampaignController::class, 'detail'])->name('campaign.detail');
+        Route::resource('/campaignn', CampaignController::class)->except('create', 'edit');
+        // Route::resource('/campaignn', CampaignController::class);
     });
 
     Route::group([

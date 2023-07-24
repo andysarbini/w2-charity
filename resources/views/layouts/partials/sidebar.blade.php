@@ -13,7 +13,7 @@
           <img src="{{ asset('/AdminLTE/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="{{ route('profile.show') }}" class="d-block">Alexander Pierce</a>
         </div>
       </div>
 
@@ -135,16 +135,6 @@
             </li>
           @endif
 
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-user-edit"></i>
-              <p>
-                Profile               
-              </p>
-            </a>
-          </li>
-
-          
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-circle text-info"></i>

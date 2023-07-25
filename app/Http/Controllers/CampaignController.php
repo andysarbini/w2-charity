@@ -182,7 +182,6 @@ class CampaignController extends Controller
 
         }
 
-        // dd($data);
         $campaignn->update($data);
         $campaignn->category_campaign()->sync($request->categories);
 

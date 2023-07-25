@@ -3,6 +3,7 @@
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,6 +62,9 @@ Route::group(['middleware' => ['role:admin,donatur']], function () {
         Route::get('/campaign/detail/{id}', [CampaignController::class, 'detail'])->name('campaign.detail');
         Route::resource('/campaignn', CampaignController::class)->except('create', 'edit');
         // Route::resource('/campaignn', CampaignController::class);
+
+        Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::put('/setting/{setting}', [SettingController::class, 'update'])->name('setting.update');
     });
 
     Route::group([

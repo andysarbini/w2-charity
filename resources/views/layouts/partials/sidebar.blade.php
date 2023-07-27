@@ -126,7 +126,7 @@
           <li class="nav-header">PENGATURAN</li>
           @if (auth()->user()->hasRole('admin'))
             <li class="nav-item">
-              <a href="pages/widgets.html" class="nav-link">
+              <a href="{{ route('setting.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-cog"></i>
                 <p>
                   Setting               

@@ -14,9 +14,12 @@ class SettingTableSeeder extends Seeder
      */
     public function run()
     {
-        Setting::create([
+        Setting::query()->updateOrCreate([
+            'email' => 'support@w2charity.com'
+        ],[
             'email' => 'support@w2charity.com',
             'phone' => '0890909090',
+            'phone_hours' => 'Senin - Jum\'at, 08:00 s/d 16:00',
             'owner_name' => 'Administrator',
             'company_name' => 'W2 Charity',
             'short_description' => '-',
@@ -25,7 +28,11 @@ class SettingTableSeeder extends Seeder
             'address' => '-',
             'postal_code' => 12345,
             'city' => '-',
-            'province' => '-'
+            'province' => '-',
+            'instagram_link' => '-',
+            'twitter_link' => '-',
+            'fanpage_link' => '-',
+            'google_plus_link' => '-'
         ]);
         
     }

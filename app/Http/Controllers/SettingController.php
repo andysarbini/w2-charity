@@ -65,6 +65,7 @@ class SettingController extends Controller
             'owner_name' => 'required',
             'email' => 'required|email',
             'phone' => 'required|string|min:11|max:17',
+            'phone_hours' => 'required',
             'about' => 'required',
             'address' => 'nullable',
             'city' => 'nullable',
@@ -79,6 +80,15 @@ class SettingController extends Controller
                 'path_image' => 'nullable|mimes:png, jpg, jpeg|max:2048',
                 'path_image_header' => 'nullable|mimes:png, jpg, jpeg|max:2048',
                 'path_image_footer' => 'nullable|mimes:png, jpg, jpeg|max:2048'
+            ];
+        }
+        
+        if ($request->has('pills') && $request->pills == 'social-media') {
+            $rules = [
+                'instagram_link' => 'required|url',
+                'twitter_link' => 'required|url',
+                'fanpage_link' => 'required|url',
+                'google_plus_link' => 'required|url'
             ];
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
+use App\Models\Bank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +17,8 @@ class SettingController extends Controller
     public function index()
     {
         $setting = Setting::first();
-        return view('setting.index', compact('setting'));
+        $bank = Bank::all()->pluck('name', 'id');
+        return view('setting.index', compact('setting', 'bank'));
     }
 
     /**
@@ -35,10 +37,7 @@ class SettingController extends Controller
      * @param  \App\Models\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function show(Setting $setting)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -91,8 +90,17 @@ class SettingController extends Controller
                 'google_plus_link' => 'required|url'
             ];
         }
+        
+        if ($request->has('pills') && $request->pills == 'bank') {
+            $rules = [
+                'bank_id' => 'required|exists:bank,id|unique:bank_setting,bank_id',
+                'account' => 'required|unique:bank_setting,account',
+                'name' => 'required'
+            ];
+        }
 
         $this->validate($request, $rules);  
+
         $data = $request->except('path_image', 'path_image_header', 'path_image_footer');
         
         // return $request->file('path_image_header');     
@@ -127,14 +135,26 @@ class SettingController extends Controller
         // }
 
         $setting->update($data);
+
+        if ($request->has('pills') && $request->pills == 'bank') {
+            $setting->bank_setting()->attach($request->bank_id, $request->only('account', 'name'));
+        }
         
         return back()->with([
             'message' => 'Pengaturan telah diperbarui',
             'success' => true
         ]);
-        
-
        
+    }
+    
+    public function bankDestroy(Setting $setting, $id)
+    { 
+        $setting->bank_setting()->detach($id);
+
+        return back()->with([
+            'message' => 'Data sudah dihapus',
+            'success' => true
+        ]);
     }
 
 }

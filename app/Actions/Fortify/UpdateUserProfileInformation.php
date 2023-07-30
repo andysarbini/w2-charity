@@ -18,14 +18,25 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, array $input)
     {
-        $validated = Validator::make($input, [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'path_image' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
-        ]);
+        ];
 
+        if ($input['pills'] == 'bank') {
+            $rules = [
+                'bank_id' => 'required|exists:bank,id|unique:bank_user,bank_id',
+                'account' => 'required|unique:bank_user,account',
+                'name' => 'required'
+            ];
+        }
+
+        $validated = Validator::make($input, $rules);
         if ($validated->fails()) {
-            return back()->withErrors($validated->errors());
+            return back()
+                ->withInput()
+                ->withErrors($validated->errors());
         }
 
         if (isset($input['path_image'])) {
@@ -33,6 +44,14 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         }
         
         $user->update($input);
+
+        if ($input['pills'] == 'bank') {
+            $user->bank_user()->attach($input['bank_id'], [
+                'account' => $input['account'],
+                'name' => $input['name']
+            ]);
+        }
+        
         // $user->forceFill([
         //     'name' => $input['name'],
         //     'email' => $input['email'],

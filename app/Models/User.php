@@ -23,7 +23,7 @@ class User extends Authenticatable
      *
      * @var string[]
      */
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -64,5 +64,12 @@ class User extends Authenticatable
     public function hasRole($role)
     {
         return $this->role->name == $role;
+    }
+
+    public function bank_user()
+    {
+        return $this->belongsToMany(Bank::class, 'bank_user', 'user_id')
+                ->withPivot('account', 'name')
+                ->withTimestamps();
     }
 }

@@ -44,4 +44,5 @@
         {{-- password --}}
     </div>
 @endsection
+@includeIf('includes.summernote', ['some' => 'data'])
 <x-toast />

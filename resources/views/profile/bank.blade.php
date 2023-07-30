@@ -1,4 +1,4 @@
-<form action="{{ route('setting.update', $setting->id)}}?pills=bank" method="post">
+<form action="{{ route('user-profile-information.update')}}?pills=bank" method="post">
     @csrf
     @method('put')
 
@@ -64,14 +64,14 @@
             <th>Bank</th>
             <th width="15%"><i class="fas fa-cog"></i></th>
         </x-slot>
-        @foreach ($setting->bank_setting as $key => $item)
+        @foreach ($user->bank_user as $key => $item)
             <tr>
                 <td>{{ $key+1 }}</td>
                 <td>{{ $item->pivot->name }}</td>
                 <td>{{ $item->pivot->account }}</td>
                 <td>{{ $item->name }}</td>
                 <td>
-                    <form action="{{ route('setting.bank.destroy', ['setting' => $setting->id, 'id' => $item->id]) }}" method="post">
+                    <form action="{{ route('profile.bank.destroy', $item->id) }}" method="post">
                         @csrf
                         @method('delete')
 
@@ -82,4 +82,5 @@
         @endforeach
     </x-table>
 </x-card>
+
 

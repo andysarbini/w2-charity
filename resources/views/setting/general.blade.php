@@ -78,7 +78,7 @@
               
         <div class="form-group">
             <label for="about">Tentang Perusahaan</label>
-            <textarea class="form-control @error('about')
+            <textarea class="form-control summernote @error('about')
                 is-invalid @enderror" name="about" id="about" cols="30" rows="10">
                 {{ old('about') ?? $setting->about }}</textarea>
             @error('about')

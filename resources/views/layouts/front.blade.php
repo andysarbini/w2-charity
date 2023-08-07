@@ -175,18 +175,18 @@
         padding-bottom: 10px;
         position: relative;
       }
-      .banner .bg-charity2 {
+      .banner.bg-charity2 {
         background-image: url('{{ asset("/img/bgcharity2.png") }}');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: bottom;
       }
-      .banner .bg-charity2 h2 {
+      .banner.bg-charity2 h2 {
         text-shadow: 1px 1px 3px rgba(0, 0, 0, .8);
       }
 
       @media (max-width: 575.98px) {
-        .banner .bg-charity2 {
+        .banner.bg-charity2 {
           background-size: cover;
           background-position: left;
         }
@@ -248,7 +248,7 @@
           <ul class="navbar-nav ml-auto">
             <a class="nav-link @if(request()->is('/')) active @endif" href="{{ url('/') }}">Home</a>
             <a class="nav-link @if(request()->is('contact')) active @endif" href="{{ url('/contact') }}">Kontak</a>
-            <a class="nav-link @if(request()->is('about')) active @endif" href="#">Tentang Kami</a>
+            <a class="nav-link @if(request()->is('about')) active @endif" href="{{ url('/about') }}">Tentang Kami</a>
 
             <div class="dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">

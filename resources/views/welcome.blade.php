@@ -109,7 +109,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="fa-3x mb-4">Dana Tersalurkan</h2>
-                    <h3 class="font-weight-bold mb3">
+                    <h3 class="font-weight-normal mb3">
                         Jika Anda dapat bergaung dengan kami sekarang, <br>
                         maka semakin banyak yang terbantu
                     </h3>
@@ -149,7 +149,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="fa-3x mb-4">GALANG DANA DI W2-CHARITY</h2>
-                    <h3 class="font-weight-bold mb-4">
+                    <h3 class="font-weight-normal mb-4">
                         Dari menolong anggota keluarga, hingga membangun jembatan di desa, <br>
                         ribuan orang telah menggunakan w2-charity untuk galang dana.
                     </h3>

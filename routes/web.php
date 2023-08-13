@@ -30,6 +30,10 @@ Route::get('/about', function () {
     return view('about');
 });
 
+Route::get('/donation', function () {
+    return view('donation');
+});
+
 // Route::middleware([
 //     'auth:sanctum',
 //     config('jetstream.auth_session'),

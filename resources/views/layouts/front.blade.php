@@ -224,7 +224,7 @@
             </div>
             {{-- button --}}
             <div class="col-lg-2 action" style="white-space: nowrap;">
-              <a href="" class="btn btn-sm btn-light py-0 rounded-0">Donasi</a>
+              <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-0">Donasi</a>
               <a href="" class="btn btn-sm btn-light py-0 rounded-0">Galang Dana</a>
             </div>
           </div>
@@ -291,7 +291,7 @@
               <small class="text-muted">{{ tanggal_indonesia(now()) }}</small>
             </p>
             <p class="mb-lg-3 mb-1">
-              <a href="" class="text-white-80 text-decoration-none">Donasi</a> <br>
+              <a href="{{ url('/donation') }}" class="text-white-80 text-decoration-none">Donasi</a> <br>
               <small class="text-muted">{{ tanggal_indonesia(now()) }}</small>
             </p>
           </div>

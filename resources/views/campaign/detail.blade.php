@@ -7,7 +7,7 @@
     <li class="breadcrumb-item active">Detail</li>
 @endsection
 
-{{-- @push('css')
+@push('css')
     <style>
       .daftar-donasi.nav-pills .nav-link.active,
       .daftar-donasi.nav-pills .show>.nav-link {
@@ -17,7 +17,7 @@
         border-radius: 0;
       }
     </style>
-@endpush --}}
+@endpush
 
 @section('content')
    <div class="row">

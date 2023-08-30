@@ -60,10 +60,10 @@
     {{-- Jumbotron --}}
     <div class="jumbotron d-flex justify-content-center align-items-center mb-0">
         <div class="shadow-sm p-3 bg-white-50 rounded">
-            <div class="card p-4 border text-center">
+            <div class="card p-4 border text-center mb-0">
                 <h1 class="display-4 font-weight-bold">GALANG DANA</h1>
                 <p class="lead text-capitalize mt-3">Untuk hal yang anda perjuangkan demi kemanusiaan</p>
-                <a href="" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
+                <a href="{{ url('/campaignn') }}" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
             </div>
         </div>
     </div>
@@ -115,29 +115,35 @@
                     </h3>
                 </div>
 
-                @for ($i = 0; $i < 6; $i++)
+                @foreach ($campaign as $item)    
                     <div class="col-lg-4 col-md-6">
                         <div class="card mt-4">
-                            <img src="..." class="card-img-top" alt="...">
+                            <div style="height: 200px; overflow: hidden;">
+                                @if (Storage::disk('public')->exists($item->path_image))
+                                    <img src="{{ Storage::disk('public')->url($item->path_image) }}" alt="..." class="card-img-top">
+                                @else
+                                    <img src="..." class="card-img-top" alt="...">
+                                @endif
+                            </div>
                             <div class="card-body p-2">
                                 <div class="d-flex justify-content-between text-dark">
-                                    <p class="mb-0">Terkumpul: <strong>1jt</strong></p>
-                                    <p class="mb-0">Goal: <strong>10jt</strong></p>
+                                    <p class="mb-0">Terkumpul: <strong>{{ format_uang($item->nominal) }}</strong></p>
+                                    <p class="mb-0">Goal: <strong>{{ format_uang($item->goal) }}</strong></p>
                                 </div>
                             </div>
                             <div class="card-body p-2 border-top">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Lorem impus dolor sit amet</p>
+                                <h5 class="card-title">{{ $item->title }}</h5>
+                                <p class="card-text">{{ Str::limit($item->short_description, 100, ' ...') }}</p>
                             </div>
-                            <div class="card-footer bg-light p-2">
-                                <a href="" class="btn btn-primary d-block rounded">
+                            <div class="card-footer p-2">
+                                <a href="{{ url('/donation/'. $item->id) }}" class="btn btn-primary d-block rounded">
                                     <i class="fas fa-donate"></i>
                                     Donasi Sekarang
                                 </a>
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
 
             </div>
         </div>
@@ -153,9 +159,11 @@
                         Dari menolong anggota keluarga, hingga membangun jembatan di desa, <br>
                         ribuan orang telah menggunakan w2-charity untuk galang dana.
                     </h3>
-                    <a href="" class="btn btn-primary bnt-lg rounded m-auto">Galang Dana Sekarang</a>
+                    <a href="{{ url('/campaignn') }}" class="btn btn-primary bnt-lg rounded m-auto">Galang Dana Sekarang</a>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+<x-toast />

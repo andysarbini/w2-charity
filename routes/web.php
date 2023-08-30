@@ -3,6 +3,7 @@
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserProfileInformationController;
 use Illuminate\Support\Facades\Route;
@@ -18,41 +19,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('front.welcome');
-});
-
-Route::get('/contact', function () {
-    return view('front.contact');
-});
-
-Route::get('/about', function () {
-    return view('front.about');
-});
-
-Route::get('/donation', function () {
-    return view('front.donation.index');
-});
-
-Route::get('/donation/1', function () {
-    return view('front.donation.show');
-});
-
-Route::get('/donation/1/create', function () {
-    return view('front.donation.create');
-});
-
-Route::get('/donation/1/payment', function () {
-    return view('front.donation.payment');
-});
-
-Route::get('/donation/1/payment-confirmation', function () {
-    return view('front.donation.payment_confirmation');
-});
-
-Route::get('/donation/1/payment-confirmation', function () {
-    return view('front.donation.payment_confirmation');
-});
+Route::get('/', [FrontController::class, 'index']);
+Route::get('/contact', [FrontController::class, 'contact']);
+Route::POST('/contact', [FrontController::class, 'storeContact']);
+Route::get('/about', [FrontController::class, 'about']);
+Route::get('/donation', [FrontController::class, 'donation']);
+Route::get('/donation/{id}', [FrontController::class, 'donationDetail']);
+Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
+Route::get('/donation/{id}payment', [FrontController::class, 'donationPayment']);
+Route::get('/donation/{id}payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+Route::post('/subscriber', [FrontController::class, 'subscriberStore']);
 
 
 // Route::middleware([

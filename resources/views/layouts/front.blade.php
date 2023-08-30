@@ -9,8 +9,8 @@
 
     <link rel="icon" href="{{ asset('/img/favicon.png') }}" type="image/*">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('/AdminLTE/dist/css/adminlte.min.css')}}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,30 +204,30 @@
         <div class="row d-flex align-items-center">
             {{-- social --}}
             <div class="col-lg-3 social">
-              <a href="" class="text-white"><i class="fab fa-twitter"></i></a>
-              <a href="" class="text-white ml-3"><i class="fab fa-linkedin-in"></i></a>
-              <a href="" class="text-white ml-3"><i class="fab fa-google-plus-g"></i></a>
-              <a href="" class="text-white ml-3"><i class="fab fa-facebook-f"></i></a>
+              <a href="{{ $setting->instagram_link }}" target="_blank" class="text-white"><i class="fab fa-instagram"></i></a>
+              <a href="{{ $setting->instagram_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-twitter"></i></a>
+              <a href="{{ $setting->instagram_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-google-plus-g"></i></a>
+              <a href="{{ $setting->instagram_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-facebook-f"></i></a>
             </div>
             {{-- info --}}
             <div class="col-lg-7 office-info text-center">
                 <a href="" class="text-white text-decoration-none">
                   <i class="fas fa-phone-alt"></i>
-                  <span class="ml-1">090909090900</span>
+                  <span class="ml-1">{{ $setting->phone }}</span>
                 </a>
                 <a href="" class="ml-3 text-white text-decoration-none">
                   <i class="fas fa-clock"></i>
-                  <span class="ml-1">Senin - Jum'at, 08:00 s/d 16:00</span>
+                  <span class="ml-1">{{ $setting->phone_hours }}</span>
                 </a>
                 <a href="" class="ml-3 text-white text-decoration-none">
                   <i class="fas fa-envelope"></i>
-                  <span class="ml-1">Support@w2charity.com</span>
+                  <span class="ml-1">{{ $setting->email }}</span>
                 </a>            
             </div>
             {{-- button --}}
             <div class="col-lg-2 action" style="white-space: nowrap;">
               <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-0">Donasi</a>
-              <a href="" class="btn btn-sm btn-light py-0 rounded-0">Galang Dana</a>
+              <a href="{{ url('/campaignn') }}" class="btn btn-sm btn-light py-0 rounded-0">Galang Dana</a>
             </div>
           </div>
         </div>
@@ -279,17 +279,17 @@
               <img src="{{ asset('/img/logo2.png') }}" alt="" style="width: 170px;">
             </div>
             <p>
-              Jl. Kibandang Samaran <br>
-              Cirebon, Jawa Barat
+              {{ $setting->address }} <br>
+              {{ $setting->city }}, {{ $setting->province }}
             </p>
-            <p class="mb-1"><i class="fas fa-phone-alt mr-2"></i> 091209090909</p>
-            <p class="mb-1"><i class="fas fa-envelope mr-2"></i> support@w2-charity.com</p>
-            <p class="mb-1"><i class="fas fa-globe mr-2"></i> www.w2charity.com</p>
+            <p class="mb-1"><i class="fas fa-phone-alt mr-2"></i> {{ $setting->phone }}</p>
+            <p class="mb-1"><i class="fas fa-envelope mr-2"></i> {{ $setting->email }}</p>
+            <p class="mb-1"><i class="fas fa-globe mr-2"></i> {{ $setting->company_name }}</p>
           </div>
           <div class="col-lg-3 text-white-80">
             <h5 class="mb-lg-4 mb-2">Mari Berbagi</h5>
             <p class="mb-lg-3 mb-1">
-              <a href="" class="text-white-80 text-decoration-none">Galang Dana</a> <br>
+              <a href="{{ url('/campaignn') }}" class="text-white-80 text-decoration-none">Galang Dana</a> <br>
               <small class="text-muted">{{ tanggal_indonesia(now()) }}</small>
             </p>
             <p class="mb-lg-3 mb-1">
@@ -299,14 +299,15 @@
           </div>
           <div class="col-lg-3 text-white-80">
             <h5 class="mb-lg-4 mb-2">Bantuan</h5>
-            <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Tentang Kami</a></p>
-            <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Syarat dan Ketentuan</a></p>
-            <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Kebijakan dan Privasi</a></p>
+            <p class="mb-lg-3 mb-1"><a href="{{ url('/about') }}" class="text-white-80 text-decoration-none">Tentang Kami</a></p>
+            <p class="mb-lg-3 mb-1"><a href="#" class="text-white-80 text-decoration-none">Syarat dan Ketentuan</a></p>
+            <p class="mb-lg-3 mb-1"><a href="#" class="text-white-80 text-decoration-none">Kebijakan dan Privasi</a></p>
           </div>
           <div class="col-lg-3 text-white-80">
             <h5 class="mb-lg-4 mb-2">Mari Berbagi</h5>
-            <form action="" class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Masukkan email">
+            <form action="{{ url('/subscriber') }}" method="POST" class="input-group mb-3">
+              <input type="text" value="{{ old('email') }}" class="form-control" placeholder="Masukkan email">
+              @csrf
               <div class="input-group-append">
                 <button class="btn btn-primary px-3"><i class="fas fa-paper-plane"></i></button>
               </div>
@@ -318,6 +319,9 @@
     
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- AdminLTE App -->
+    <script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
 
     @stack('scripts_vendor')
 
@@ -331,12 +335,6 @@
               .next('.custom-file-label')
               .addClass('selected')
               .html(filename);
-        });
-
-        $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
         });
 
         function preview(target, image) {

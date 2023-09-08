@@ -56,8 +56,8 @@ class CampaignController extends Controller
                 ->addColumn('actions', function ($query) {
                     return '
                     <a href="'. route('campaign.detail', $query->id) .'" class="btn btn-link text-dark"><i class="fas fa-search-plus"></i></a>
-                    <button onclick="editForm(`'. route('campaignn.show', $query->id) .'`)" class="btn btn-link text-info"><i class="fas fa-edit"></i></button>
-                          <button class="btn btn-link text-danger" onclick="deleteData(`'. route('campaignn.destroy', $query->id) .'`)"><i class="fas fa-trash"></i></button>
+                    <button onclick="editForm(`'. route('kampanye.show', $query->id) .'`)" class="btn btn-link text-info"><i class="fas fa-edit"></i></button>
+                          <button class="btn btn-link text-danger" onclick="deleteData(`'. route('kampanye.destroy', $query->id) .'`)"><i class="fas fa-trash"></i></button>
                     ';
                 })
                 ->rawColumns(['short_description', 'path_image', 'status', 'action'])

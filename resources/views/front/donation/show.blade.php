@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'DARURAT! Peduli Korban Gempa Banten')
+@section('title', $campaign->title)
 
 @push('css')
     <style>
@@ -18,7 +18,7 @@
     {{-- Banner --}}
     <div class="banner bg-charity2">
         <div class="container">
-            <h2 class="fa-2x text-white">DARURAT! Peduli Korban Gempa Banten</h2>
+            <h2 class="fa-2x text-white">{{ $campaign->title }}</h2>
         </div>
     </div>
 
@@ -29,28 +29,33 @@
                 <div class="col-lg-8">
                     <div class="f-flex align-items-center">
                         <div class="img rounded-circle" style="width: 60px; overflow:hidden">
-                            <img src="{{ asset('AdminLTE/dist/img/user1-128x128.jpg') }}" alt="" class="w-100">
+                            @if (Storage::disk('public')->exists($campaign->user->path_image)) 
+                                <img src="{{ Storage::disk('public')->url($campaign->user->path_image) }}" alt="" class="w-100">
+                            @else
+                                <img src="{{ asset('AdminLTE/dist/img/user1-128x128.jpg') }}" alt="" class="w-100">
+                            @endif
                         </div>
                         <div class="ml-3">
-                            <strong class="d-block">Username</strong>
-                            <small class="text-muted">20 September 2021</small>
+                            <strong class="d-block">{{ $campaign->user->name }}</strong>
+                            <small class="text-muted">{{ tanggal_indonesia(\Carbon\Carbon::createFromTimestamp(strtotime($campaign->publish_date))->format('Y-m-d'))}}</small>
                         </div>
                     </div>
-                        <div class="thumbnail rounded mt-4" style="overflow: hidden">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Standing_jaguar.jpg" alt="" class="w-100">
+                        <div class="thumbnail rounded mt-4" style="overflow: hidden">                     
+                            @if (Storage::disk('public')->exists($campaign->path_image))
+                                <img src="{{ Storage::disk('public')->url($campaign->path_image) }}" alt="..." class="w-100">
+                            @else
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Standing_jaguar.jpg" alt="" class="w-100">
+                            @endif
                         </div>
     
                         <div class="body mt-4">
-                            <h5>Creating Something New</h5>
-                            <p>The phrase "Lorem ipsum dolor sit amet consectetuer" appears in Microsoft Word online Help. This phrase has the appearance of an intelligent Latin idiom. Actually, it is nonsense.</p>
-                            <p>A 1994 issue of "Before & After" magazine traces "Lorem ipsum ..." to a jumbled Latin version of a passage from de Finibus Bonorum et Malorum, a treatise on the theory of ethics written by Cicero in 45 B.C. The passage "Lorem ipsum ..." is taken from text that reads, "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit ...," which translates as, "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."</p>
-                            
-                            <h5>More Information</h5>
-                            <p>Although the phrase is nonsense, it does have a long history. The phrase has been used for several centuries by typographers to show the most distinctive features of their fonts. It is used because the letters involved and the letter spacing in those combinations reveal, at their best, the weight, design, and other important features of the typeface.</p>
-                            <p>During the 1500s, a printer adapted Cicero's text to develop a page of type samples. Since then, the Latin-like text has been the printing industry's standard for fake, or dummy, text. Before electronic publishing, graphic designers had to mock up layouts by drawing in squiggled lines to indicate text. The advent of self-adhesive sheets preprinted with "Lorem ipsum" gave a more realistic way to indicate where text would go on a page.</p>
-                        
+                            {!! $campaign->body !!}
                             <div class="kategori border-top pt-3">
-                                <a href="#" class="badge badge-primary p-2 rounded-pill">Korban Banjir</a>
+                                @if ($campaign->category_campaign)
+                                    @foreach ($campaign->category_campaign as $item)
+                                        <a href="#" class="badge badge-primary p-2 rounded-pill">{{ $item->name }}</a>
+                                    @endforeach
+                                @endif
                             </div>
 
                             <hr class="d-lg-none d-block">
@@ -59,19 +64,19 @@
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="card border-0 shadow-0">
-                        <h1 class="font-weight-bold">Rp. {{ format_uang(3000000) }}</h1>
-                        <p class="font-weight-bold">Terkumpul dari Rp. {{ format_uang(10000000) }}</p>
+                    <div class="card p-3 border-0 shadow-0">
+                        <h1 class="font-weight-bold">Rp. {{ format_uang($campaign->nominal) }}</h1>
+                        <p class="font-weight-bold">Terkumpul dari Rp. {{ format_uang($campaign->goal) }}</p>
                         <div class="progress" style="height: .3rem;">
-                            <div class="progress-bar" role="progressbar" style="width: 7%" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar" role="progressbar" style="width: {{ $campaign->nominal / $campaign->goal * 100 }}%" aria-valuenow="{{ $campaign->nominal / $campaign->goal * 100 }}" aria-valuemin="0" aria-valuemax="{{ 100 }}"></div>
                         </div>
                         <div class="d-flex justify-content-between mt-1">
-                            <p>7% tercapai</p>
+                            <p>{{ $campaign->nominal / $campaign->goal * 100 }}% tercapai</p>
                             <p>3 bulan lagi</p>
                         </div>
 
                         <div class="donasi mt-2 mb-4">
-                            <a href="{{ url('/donation/1/create') }}" class="btn btn-primary btn-lg btn-block">Donasi Sekarang</a>
+                            <a href="{{ url('/donation/'. $campaign->id .'/create') }}" class="btn btn-primary btn-lg btn-block">Donasi Sekarang</a>
                         </div>
 
                         <h4 class="font-weight-bold">Donatur (3)</h4>

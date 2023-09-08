@@ -118,7 +118,7 @@
                 @foreach ($campaign as $item)    
                     <div class="col-lg-4 col-md-6">
                         <div class="card mt-4">
-                            <div style="height: 200px; overflow: hidden;">
+                            <div class="rounded-top" style="height: 200px; overflow: hidden;">
                                 @if (Storage::disk('public')->exists($item->path_image))
                                     <img src="{{ Storage::disk('public')->url($item->path_image) }}" alt="..." class="card-img-top">
                                 @else

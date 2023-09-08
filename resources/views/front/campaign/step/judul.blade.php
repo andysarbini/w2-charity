@@ -1,7 +1,6 @@
 <div class="form-group">
     <label for="categories">Kategori apa yang tepat untuk penggalangan dana ini ?</label>
-    <select name="categories[]" id="categories" class="select2" multiple>         
-    
+    <select name="categories[]" id="categories" class="select2" multiple required>            
     </select>
 </div>
 <div class="form-group">

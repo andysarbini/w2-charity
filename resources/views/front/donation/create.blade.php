@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'DARURAT! Peduli Korban Gempa Banten')
+@section('title', $campaign->title)
     
 @section('content')
     <div class="container py-5">
@@ -12,12 +12,16 @@
                         <div class="card-body d-flex">
                             <div class="thumbnail rounded w-25" style="overflow: hidden">
                                 <div class="thumbnail rounded mt-4" style="overflow: hidden">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Standing_jaguar.jpg" alt="">
+                                     @if (Storage::disk('public')->exists($campaign->path_image))
+                                        <img src="{{ Storage::disk('public')->url($campaign->path_image) }}" alt="..." class="w-100">
+                                    @else
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Standing_jaguar.jpg" class="w-100" alt="...">
+                                    @endif
                                 </div>
 
                                 <div class="body ml-3">
                                     <h5>Anda akan berdonasi untuk:</h5>
-                                    <p>Jariyah Bantu Semua Orang Mengurangi Pengangguran</p>
+                                    <p>{{ $campaign->title }}</p>
                                 </div>
                             </div>
                         </div>
@@ -33,23 +37,31 @@
                                     Donasi mulai dari Rp. berapapun dengan Dompet Kebaikan.
                                 </div>
 
-                                @if (true)
+                                @if (auth()->user()->hasRole('admin'))
                                     <div class="form-group">
                                         <label for="user_id">Donatur</label>
                                         <select name="user_id" id="user_id" class="form-control">
                                             <option value="" disabled selected>Pilih donatur</option>
                                         </select>
                                     </div>
-                                @else
-                                    <input type="text" name="user_id" value="">
-                                @endif
-                                <div class="form-group">
-                                    <label for="">098989898</label>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="anonim" name="anonim">
-                                        <label for="anonim" class="custom-control-label">Sembunyikan nama saya (Anonim)</label>
+                                    <div class="form-group">
+                                        <label for="">098989898</label>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="anonim" name="anonim">
+                                            <label for="anonim" class="custom-control-label">Sembunyikan nama saya (Anonim)</label>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <input type="text" name="user_id" value="{{ auth()->id() }}">
+                                    <div class="form-group">
+                                        <label for="">098989898</label>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="anonim" name="anonim">
+                                            <label for="anonim" class="custom-control-label">Sembunyikan nama saya (Anonim)</label>
+                                        </div>
+                                    </div>
+                                @endif
+                                
                                 <div class="form-group">
                                     <textarea name="support" id="support" rows="4" class="form-control" placeholder="Tulis dukungan atau doa untuk penggalangan dana ini. Contoh: Semoga cepat sembuh, ya!"></textarea>
                                 </div>

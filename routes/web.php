@@ -25,9 +25,13 @@ Route::POST('/contact', [FrontController::class, 'storeContact']);
 Route::get('/about', [FrontController::class, 'about']);
 Route::get('/donation', [FrontController::class, 'donation']);
 Route::get('/donation/{id}', [FrontController::class, 'donationDetail']);
-Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
-Route::get('/donation/{id}payment', [FrontController::class, 'donationPayment']);
-Route::get('/donation/{id}payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+
+Route::group(['middleware' => ['auth', 'role:admin,donatur']], function () {
+    Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
+    Route::get('/donation/{id}payment', [FrontController::class, 'donationPayment']);
+    Route::get('/donation/{id}payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+});
+
 Route::post('/subscriber', [FrontController::class, 'subscriberStore']);
 
 
@@ -74,8 +78,8 @@ Route::group(['middleware' => ['role:admin,donatur']], function () {
         
         Route::get('/campaign/data', [CampaignController::class, 'data'])->name('campaign.data');
         Route::get('/campaign/detail/{id}', [CampaignController::class, 'detail'])->name('campaign.detail');
-        Route::resource('/campaignn', CampaignController::class)->except('create', 'edit');
-        // Route::resource('/campaignn', CampaignController::class);
+        Route::resource('/kampanye', CampaignController::class)->except('create', 'edit');
+        // Route::resource('/kampanye', CampaignController::class);
 
         Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
         Route::put('/setting/{setting}', [SettingController::class, 'update'])->name('setting.update');

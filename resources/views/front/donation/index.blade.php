@@ -59,61 +59,60 @@
                     <p>Pilih Campaign yang ingin Anda bantu</p>
                 </div>
                 <div class="col-lg-4">
-                    <div class="form-group">
-                        <select name="" id="" class="form-control control-lg">
-                            <option disabled selected>Semua Kategori</option>
-                        </select>
-                     </div>
+                    {{-- @dd(request()->categories) --}}
+                        <form action="{{ url('/donation') }}" class="form-group" method="GET">
+                            <select name="categories[]" id="categories" class="select2" multiple required style="width: 100%;" onchange="$(this.form).submit()">
+                                @foreach ($category as $key => $item)
+                                    <option value="{{ $key }}" {{ request()->has('categories') && in_array($key, request()->categories) ? 'selected' : '' }}>{{ $item }}</option>
+                                @endforeach            
+                            </select>
+                        </form>
+                     
                 </div>    
                 
-                @for ($i = 0; $i < 6; $i++)
+                @foreach ($campaign as $item)
                     <div class="col-lg-4 col-md-6">
                         <div class="card mt-4">
-                            <img src="..." class="card-img-top" alt="...">
+                            <div class="rounded-top" style="height: 200px; overflow: hidden;">
+                                @if (Storage::disk('public')->exists($item->path_image))
+                                    <img src="{{ Storage::disk('public')->url($item->path_image) }}" alt="..." class="card-img-top">
+                                @else
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Standing_jaguar.jpg" class="card-img-top" alt="...">
+                                @endif
+                            </div>
                             <div class="card-body p-2">
                                 <div class="d-flex justify-content-between text-dark">
-                                    <p class="mb-0">Terkumpul: <strong>1jt</strong></p>
-                                    <p class="mb-0">Goal: <strong>10jt</strong></p>
+                                    <p class="mb-0">Terkumpul: <strong>{{ format_uang($item->nominal) }}</strong></p>
+                                    <p class="mb-0">Goal: <strong>{{ format_uang($item->goal) }}</strong></p>
                                 </div>
                             </div>
                             <div class="card-body p-2 border-top">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Lorem impus dolor sit amet</p>
+                                <h5 class="card-title">{{ $item->title }}</h5>
+                                <p class="card-text">{{ Str::limit($item->short_description, 100, ' ...') }}</p>
                             </div>
-                            <div class="card-footer bg-light p-2">
-                                <a href="" class="btn btn-primary d-block rounded">
+                            <div class="card-footer p-2">
+                                <a href="{{ url('/donation/'. $item->id) }}" class="btn btn-primary d-block rounded">
                                     <i class="fas fa-donate"></i>
                                     Donasi Sekarang
                                 </a>
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
+                
             </div>
         </div>
-    </div>    
 
-    <div class="paginasi pb-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 d-flex justify-content-center">
-                    <nav aria-label="...">
-                        <ul class="pagination mb-0">
-                          <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">&laquo;</a>
-                          </li>
-                          <li class="page-item"><a class="page-link" href="#">1</a></li>
-                          <li class="page-item active">
-                            <a class="page-link" href="#">2</a>
-                          </li>
-                          <li class="page-item"><a class="page-link" href="#">3</a></li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">&raquo;</a>
-                          </li>
-                        </ul>
-                      </nav>
+        <div class="paginasi pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <x-pagination-card :model="$campaign" />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div>     
 @endsection
+
+@includeIf('includes.select2', ['placeholder' => 'Semua kategori'])

@@ -12,7 +12,7 @@
 
         <x-card>
           <x-slot name="header">
-            <button onclick="addForm(`{{ route('campaignn.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
+            <button onclick="addForm(`{{ route('kampanye.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
           </x-slot>
 
           <div class="d-flex justify-content-between">

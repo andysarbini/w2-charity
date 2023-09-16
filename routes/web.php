@@ -28,8 +28,9 @@ Route::get('/donation/{id}', [FrontController::class, 'donationDetail']);
 
 Route::group(['middleware' => ['auth', 'role:admin,donatur']], function () {
     Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
-    Route::get('/donation/{id}payment', [FrontController::class, 'donationPayment']);
-    Route::get('/donation/{id}payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+    Route::post('/donation/{id}', [FrontController::class, 'storeDonation']);
+    Route::get('/donation/{id}/payment/{order_number}', [FrontController::class, 'donationPayment']);
+    Route::get('/donation/{id}/payment-confirmation/{order_number}', [FrontController::class, 'donationPaymentConfirmation']);
 });
 
 Route::post('/subscriber', [FrontController::class, 'subscriberStore']);

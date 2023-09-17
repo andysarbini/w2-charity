@@ -118,7 +118,7 @@
             <label class="custom-file-label" for="path_image">Choose file</label>
           </div>
         </div>
-        <img src="" class="img-thumbnail preview-path_image">
+        <img src="" class="img-thumbnail preview-path_image" style="display: none;">
       </div>
     </div>    
   

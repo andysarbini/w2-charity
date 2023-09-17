@@ -34,7 +34,7 @@
                                 <h1 class="font-weight-bold w-25">Rp. </h1>
                                 <div class="form-group w-75">
                                     <input type="number" class="form-control @error('nominal') is-invalid
-                                    @enderror" name="nominal" placeholder="Masukkan nominal donasi" value="0">
+                                    @enderror" name="nominal" placeholder="Masukkan nominal donasi" value="{{ old('nominal') ?? 0 }}">
                                     @error('nominal')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -55,7 +55,7 @@
                                     @enderror select2">
                                         <option disabled selected>Pilih donatur</option>
                                         @foreach ($user as $item)
-                                            <option value="{{ $item->id }}" data-phone="{{ $item->phone }}" >{{ $item->name }}</option>
+                                            <option value="{{ $item->id }}" data-phone="{{ $item->phone }}" {{ old('user_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('user_id')
@@ -75,12 +75,12 @@
                             @endif
                             <div class="form-group">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="anonim" name="anonim" >
+                                    <input type="checkbox" class="custom-control-input" id="anonim" name="anonim" value="1" {{ old('anonim') == 1 ? 'checked' : '' }}>
                                     <label for="anonim" class="custom-control-label">Sembunyikan nama saya (Anonim)</label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <textarea name="support" id="support" rows="4" class="form-control" placeholder="Tulis dukungan atau doa untuk penggalangan dana ini. Contoh: Semoga cepat sembuh, ya!"></textarea>
+                                <textarea name="support" id="support" rows="4" class="form-control" placeholder="Tulis dukungan atau doa untuk penggalangan dana ini. Contoh: Semoga cepat sembuh, ya!">{{ old('support') }}</textarea>
                             </div>
                         </div>
                     </div>

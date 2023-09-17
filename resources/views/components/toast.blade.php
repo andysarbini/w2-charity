@@ -12,7 +12,7 @@
         }, 3000);
     </script>
 
-    @elseif (session()->has('errors'))
+    @elseif (session()->has('error_msg'))
     <script>
         $(document).Toasts('create', {
         class: 'bg-danger',

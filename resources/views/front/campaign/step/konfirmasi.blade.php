@@ -22,6 +22,6 @@
     Saya setuju dengan <strong>Syarat & ketentuan</strong> donasi di w2charity
   </div>
   <div class="form-group">
-    <button class="btn btn-outline-primary" onclick="stepper.previous()">Sebelumnya</button>
-    <button class="btn btn-primary" onclick="submitForm()">Selesai</button>
+    <button type="button" class="btn btn-outline-primary" onclick="stepper.previous()">Sebelumnya</button>
+    <button class="btn btn-primary">Selesai</button>
 </div>

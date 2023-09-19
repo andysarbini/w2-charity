@@ -130,29 +130,9 @@
 @stack('scripts_vendor')
 <!-- AdminLTE App -->
 <script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
-
-  <script>
-    $('.custom-file-input').on('change', function() {
-      let filename = $(this).val().split('\\').pop();
-      $(this)
-          .next('.custom-file-label')
-          .addClass('selected')
-          .html(filename);
-    });
-
-    $.ajaxSetup({
-      headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-
-    function preview(target, image) {
-      $(target)
-          .attr('src', window.URL.createObjectURL(image))
-          .show();
-    }
-  </script>
-
+<script src="{{ asset('/js/custom.js') }}"></script>
+  
+  <x-toast />
   @stack('scripts')
 </body>
 </html>

@@ -55,9 +55,9 @@ class CampaignController extends Controller
                 })
                 ->addColumn('actions', function ($query) {
                     return '
-                    <a href="'. route('campaign.detail', $query->id) .'" class="btn btn-link text-dark"><i class="fas fa-search-plus"></i></a>
-                    <button onclick="editForm(`'. route('kampanye.show', $query->id) .'`)" class="btn btn-link text-info"><i class="fas fa-edit"></i></button>
-                          <button class="btn btn-link text-danger" onclick="deleteData(`'. route('kampanye.destroy', $query->id) .'`)"><i class="fas fa-trash"></i></button>
+                    <a href="'. route('campaigns.detail', $query->id) .'" class="btn btn-link text-dark"><i class="fas fa-search-plus"></i></a>
+                    <button onclick="editForm(`'. route('campaigns.show', $query->id) .'`)" class="btn btn-link text-info"><i class="fas fa-edit"></i></button>
+                          <button class="btn btn-link text-danger" onclick="deleteData(`'. route('campaigns.destroy', $query->id) .'`)"><i class="fas fa-trash"></i></button>
                     ';
                 })
                 ->rawColumns(['short_description', 'path_image', 'status', 'action'])
@@ -72,7 +72,8 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        //
+        $category = Category::orderBy('name')->get()->pluck('name', 'id');
+        return view('front.campaign.index', compact('category'));
     }
 
     /**
@@ -83,7 +84,7 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'title' => 'required|min:8',
             'categories' => 'required|array',
             'short_description' => 'required',
@@ -95,7 +96,14 @@ class CampaignController extends Controller
             'note' => 'nullable',
             'receiver' => 'required',
             'path_image' => 'required|mimes:png,jpg,jpeg|max:2048'
-        ]);
+        ];
+
+        if (auth()->user()->hasRole('donatur')) {
+            $rules['status'] = 'nullable';
+        }
+
+        
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);

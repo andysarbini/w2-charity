@@ -3,7 +3,7 @@
 @section('title', 'Project')
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item"><a href="{{ route('campaignn.index')}}">Project</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('campaigns.index')}}">Project</a></li>
     <li class="breadcrumb-item active">Detail</li>
 @endsection
 

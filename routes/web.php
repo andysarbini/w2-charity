@@ -78,22 +78,23 @@ Route::group(['middleware' => ['role:admin,donatur']], function () {
     ], function() {
         Route::resource('/category', CategoryController::class);
         
-        Route::get('/campaign/data', [CampaignController::class, 'data'])->name('campaign.data');
-        Route::get('/campaign/detail/{id}', [CampaignController::class, 'detail'])->name('campaign.detail');
-        Route::resource('/kampanye', CampaignController::class)->except('create', 'edit');
-        // Route::resource('/kampanye', CampaignController::class);
-
+        // Route::resource('/campaigns', CampaignController::class);
+        
         Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
         Route::put('/setting/{setting}', [SettingController::class, 'update'])->name('setting.update');
         Route::delete('/setting/{setting}/bank/{id}', [SettingController::class, 'bankDestroy'])->name('setting.bank.destroy');
     });
-
+    
+    Route::get('/campaigns/data', [CampaignController::class, 'data'])->name('campaigns.data');
+    Route::get('/campaigns/detail/{id}', [CampaignController::class, 'detail'])->name('campaigns.detail');
+    Route::resource('/campaigns', CampaignController::class);
+    
     Route::group([
         'middleware' => 'role:donatur'
     ], function() {
         //
     });
 
-    Route::get('/campaignn', function () {
-        return view('front.campaign.index');
-    });
+    // Route::get('/campaigns', function () {
+    //     return view('front.campaign.index');
+    // });

@@ -50,7 +50,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ route('kampanye.index') }}" class="nav-link {{ request()->is('campaign*') ? 'active' : ''}}">
+                    <a href="{{ route('campaigns.index') }}" class="nav-link {{ request()->is('campaign*') ? 'active' : ''}}">
                       <i class="nav-icon fas fa-th"></i>
                       <p>Project</p>
                     </a>

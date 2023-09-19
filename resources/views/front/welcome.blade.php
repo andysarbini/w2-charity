@@ -63,7 +63,7 @@
             <div class="card p-4 border text-center mb-0">
                 <h1 class="display-4 font-weight-bold">GALANG DANA</h1>
                 <p class="lead text-capitalize mt-3">Untuk hal yang anda perjuangkan demi kemanusiaan</p>
-                <a href="{{ url('/campaignn') }}" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
+                <a href="{{ route('campaigns.create') }}" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
             </div>
         </div>
     </div>
@@ -159,7 +159,7 @@
                         Dari menolong anggota keluarga, hingga membangun jembatan di desa, <br>
                         ribuan orang telah menggunakan w2-charity untuk galang dana.
                     </h3>
-                    <a href="{{ url('/campaignn') }}" class="btn btn-primary bnt-lg rounded m-auto">Galang Dana Sekarang</a>
+                    <a href="{{ route('campaigns.create') }}" class="btn btn-primary bnt-lg rounded m-auto">Galang Dana Sekarang</a>
                 </div>
             </div>
         </div>

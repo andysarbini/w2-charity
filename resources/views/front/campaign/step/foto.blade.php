@@ -5,8 +5,8 @@
     <label class="custom-file-label" for="path_image">Choose file</label>
     </div>
 </div>
-<small class="text-muted">Format foto harus: (jpg, png, jpeg)</small>
-<img src="" class="img-thumbnail preview-path_image">
+<small class="text-muted d-block">Format foto harus: (jpg, png, jpeg)</small>
+<img src="" class="img-thumbnail preview-path_image w-50" style="display: none;">
 
 <div class="form-group">
     <button class="btn btn-outline-primary" onclick="stepper.previous()">Sebelumnya</button>

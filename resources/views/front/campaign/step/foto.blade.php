@@ -6,9 +6,12 @@
     </div>
 </div>
 <small class="text-muted d-block">Format foto harus: (jpg, png, jpeg)</small>
-<img src="" class="img-thumbnail preview-path_image w-50" style="display: none;">
-
+    @if (isset($campaign) && Storage::disk('public')->exists($campaign->path_image))
+        <img src="{{ Storage::disk('public')->url($campaign->path_image) }}" alt="..." class="w-50">
+    @else
+        <img src="" class="img-thumbnail preview-path_image w-50" style="display: none;">
+    @endif
 <div class="form-group">
-    <button class="btn btn-outline-primary" onclick="stepper.previous()">Sebelumnya</button>
-    <button class="btn btn-primary" onclick="stepper.next()">Selanjutnya</button>
+    <button type="button" class="btn btn-outline-primary" onclick="stepper.previous()">Sebelumnya</button>
+    <button type="button" class="btn btn-primary" onclick="stepper.next()">Selanjutnya</button>
 </div>

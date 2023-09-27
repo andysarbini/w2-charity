@@ -25,7 +25,9 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $query = Campaign::orderBy('publish_date', 'desc')
+        $query = Campaign::when(auth()->user()->hasRole('donatur'), function ($query) {
+            $query->donatur();
+        })
                 ->when($request->has('status') && $request->status !="", function ($query) use ($request) {
                     $query->where('status', $request->status);
                 })
@@ -37,7 +39,8 @@ class CampaignController extends Controller
                     function ($query) use ($request) {
                         $query->whereBetween('publish_date', $request->only('start_date', 'end_date'));
                     }
-                );
+                )
+                ->orderBy('publish_date', 'desc');
 
         return datatables($query)
                 ->addIndexColumn()
@@ -54,11 +57,24 @@ class CampaignController extends Controller
                     return $query->user->name;
                 })
                 ->addColumn('actions', function ($query) {
-                    return '
-                    <a href="'. route('campaigns.detail', $query->id) .'" class="btn btn-link text-dark"><i class="fas fa-search-plus"></i></a>
-                    <button onclick="editForm(`'. route('campaigns.show', $query->id) .'`)" class="btn btn-link text-info"><i class="fas fa-edit"></i></button>
-                          <button class="btn btn-link text-danger" onclick="deleteData(`'. route('campaigns.destroy', $query->id) .'`)"><i class="fas fa-trash"></i></button>
+                    $text =  '
+                        <a href="'. route('campaigns.show', $query->id) .'" class="btn btn-link text-dark"><i class="fas fa-search-plus"></i></a>                   
                     ';
+
+                    if (auth()->user()->hasRole('donatur')) {
+                        $text .='
+                        <a href="'. route('campaigns.edit', $query->id) .'" class="btn btn-link text-primary"><i class="fas fa-pencil-alt"></i></a>
+                        ';
+                    } else {
+                        $text .='
+                            <button onclick="editForm(`'. route('campaigns.show', $query->id) .'`)" class="btn btn-link text-primary"><i class="fas fa-pencil-alt"></i></button>
+                            ';
+                    }
+
+                    $text .= '
+                    <button class="btn btn-link text-danger" onclick="deleteData(`'. route('campaigns.destroy', $query->id) .'`)"><i class="fas fa-trash"></i></button>';
+                
+                    return $text;
                 })
                 ->rawColumns(['short_description', 'path_image', 'status', 'action'])
                 ->escapeColumns([])
@@ -91,7 +107,7 @@ class CampaignController extends Controller
             'body' => 'required|min:8',
             'publish_date' => 'required|date_format:Y-m-d H:i',
             'status' => 'required|in:Publish, Archived',
-            'goal' => 'required|integer',
+            'goal' => 'required|integer|min:100000',
             'end_date' => 'required|date_format:Y-m-d H:i',
             'note' => 'nullable',
             'receiver' => 'required',
@@ -128,27 +144,32 @@ class CampaignController extends Controller
      * @param  \App\Models\Campaign  $campaign
      * @return \Illuminate\Http\Response
      */
-    public function show(Campaign $campaignn)
+    public function show(Request $request, Campaign $campaign)
     {
-        $campaignn->publish_date = date('Y-m-d H:i', strtotime($campaignn->publish_date));
-        $campaignn->end_date = date('Y-m-d H:i', strtotime($campaignn->end_date));
-        $campaignn->categories = $campaignn->category_campaign;
+        if (! $request->ajax()) {
+            return view('campaign.detail', compact('campaign'));
+        }
         
-        return response()->json(['data' => $campaignn]);
+        $campaign->publish_date = date('Y-m-d H:i', strtotime($campaign->publish_date));
+        $campaign->end_date = date('Y-m-d H:i', strtotime($campaign->end_date));
+        $campaign->categories = $campaign->category_campaign;
+        $campaign->path_image = Storage::disk('public')->url($campaign->path_image);
+        
+        return response()->json(['data' => $campaign]);
 
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show edit form.
      *
-     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function detail($id)
+    public function edit($id)
     {
+        $category = Category::orderBy('name')->get()->pluck('name', 'id');
         $campaign = Campaign::findOrFail($id);
 
-        return view('campaign.detail', compact('campaign'));
+        return view('front.campaign.index', compact('category', 'campaign'));
     }
 
     /**
@@ -158,21 +179,28 @@ class CampaignController extends Controller
      * @param  \App\Models\Campaign  $campaign
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Campaign $campaignn)
+    public function update(Request $request, Campaign $campaign)
     {
-        $validator = Validator::make($request->all(), [
+
+        $rules = [
             'title' => 'required|min:8',
             'categories' => 'required|array',
             'short_description' => 'required',
             'body' => 'required|min:8',
             'publish_date' => 'required|date_format:Y-m-d H:i',
             'status' => 'required|in:Publish, Archived',
-            'goal' => 'required|integer',
+            'goal' => 'required|integer|min:100000',
             'end_date' => 'required|date_format:Y-m-d H:i',
             'note' => 'nullable',
             'receiver' => 'required',
             'path_image' => 'nullable|mimes:png,jpg,jpeg|max:2048'
-        ]);
+        ];
+
+        if (auth()->user()->hasRole('donatur')) {
+            $rules['status'] = 'nullable';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -182,18 +210,18 @@ class CampaignController extends Controller
         $data['slug'] = Str::slug($request->title);
         
         if ($request->hasFile('path_image')) {
-            if (Storage::disk('public')->exists($campaignn->path_image)) {
-                Storage::disk('public')->exists($campaignn->path_image);
+            if (Storage::disk('public')->exists($campaign->path_image)) {
+                Storage::disk('public')->delete($campaign->path_image);
             }
 
             $data['path_image'] = upload('campaign', $request->file('path_image'), 'campaign');
 
         }
 
-        $campaignn->update($data);
-        $campaignn->category_campaign()->sync($request->categories);
+        $campaign->update($data);
+        $campaign->category_campaign()->sync($request->categories);
 
-        return response()->json(['data'=>$campaignn, 'message'=>'Project berhasil diperbarui']);
+        return response()->json(['data'=>$campaign, 'message'=>'Project berhasil diperbarui']);
     }
 
     /**

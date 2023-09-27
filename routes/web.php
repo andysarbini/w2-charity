@@ -86,7 +86,6 @@ Route::group(['middleware' => ['role:admin,donatur']], function () {
     });
     
     Route::get('/campaigns/data', [CampaignController::class, 'data'])->name('campaigns.data');
-    Route::get('/campaigns/detail/{id}', [CampaignController::class, 'detail'])->name('campaigns.detail');
     Route::resource('/campaigns', CampaignController::class);
     
     Route::group([

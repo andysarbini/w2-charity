@@ -12,14 +12,18 @@
 
         <x-card>
           <x-slot name="header">
-            <button onclick="addForm(`{{ route('campaigns.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
+            @if (auth()->user()->hasRole('admin'))
+              <button onclick="addForm(`{{ route('campaigns.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
+            @else
+              <a href="{{ route('campaigns.create')}}" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></a>
+            @endif
           </x-slot>
 
           <div class="d-flex justify-content-between">
             <div class="form-group">
               <label for="status2">Status</label>
               <select name="status2" id="status2" class="custom-select">
-                  <option disabled selected>Pilih salah satu</option>
+                  <option value="" selected>All</option>
                   <option value="Publish">Publish</option>
                   <option value="Pending">Pending</option>
                   <option value="Archived">Archived</option>

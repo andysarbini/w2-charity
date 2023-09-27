@@ -52,8 +52,13 @@
                   </div>
                     
                     <div class="bs-stepper-content">
-                      <form action="{{ route('campaigns.store') }}" method="post" onsubmit="submitForm(this)" enctype="multipart/form-data">
+                      <form action="{{ isset($campaign) ? route('campaigns.update', $campaign->id) : route('campaigns.store') }}" method="post" onsubmit="submitForm(this)" enctype="multipart/form-data">
                         @csrf
+
+                        @isset($campaign)
+                            @method('PUT')
+                        @endisset
+
                         <!-- your steps content here -->
                         <div id="judul-part" class="content" role="tabpanel" aria-labelledby="judul-part-trigger">
                           @includeIf('front.campaign.step.judul')

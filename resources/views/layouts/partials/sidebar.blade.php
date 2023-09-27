@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
-      <img src="{{ Storage::disk('public')->url($setting->path_image ?? '') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ Storage::disk('public')->url($setting->path_image ?? '') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3 bg-light" style="opacity: .8">
       <span class="brand-text font-weight-light">{{ $setting->company_name }}</span>
     </a>
 
@@ -10,7 +10,11 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ Storage::disk('public')->url(auth()->user()->path_image ?? '') }}" class="img-circle elevation-2" alt="User Image">
+          @if (Storage::disk('public')->url(auth()->user()->path_image))              
+            <img src="{{ Storage::disk('public')->url(auth()->user()->path_image ?? '') }}" class="img-circle elevation-2" alt="">
+          @else
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Standing_jaguar.jpg" alt="" class="img-circle elevation-2">
+          @endif
         </div>
         <div class="info">
           <a href="{{ route('profile.show') }}" class="d-block">{{ auth()->user()->name }}</a>
@@ -34,21 +38,18 @@
             </a>            
           </li>
 
-          @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('donatur'))
-              <li class="nav-item">
-                <a href="#" class="nav-link">           
-                  <p>
-                    MASTER
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
+          @if (auth()->user()->hasRole('admin'))
+              <li class="nav-header">MASTER</li>
                   <li class="nav-item">
                     <a href="{{ route('category.index')}}" class="nav-link {{ request()->is('category*') ? 'active' : ''}}">
                       <i class="nav-icon fas fa-cube"></i>
                       <p>Kategori</p>
                     </a>
                   </li>
+          @else
+              <li class="nav-header">MASTER</li>
+          @endif
+            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('donatur'))
                   <li class="nav-item">
                     <a href="{{ route('campaigns.index') }}" class="nav-link {{ request()->is('campaign*') ? 'active' : ''}}">
                       <i class="nav-icon fas fa-th"></i>
@@ -58,7 +59,7 @@
                   
                 </ul>
               </li>
-
+            @endif
               <li class="nav-header">REFERENSI</li>
               <li class="nav-item">
                 <a href="pages/widgets.html" class="nav-link">
@@ -77,7 +78,7 @@
                   </p>
                 </a>
               </li>
-          @endif
+          
 
           @if (auth()->user()->hasRole('admin'))
             <li class="nav-header">INFORMASI</li>
@@ -123,8 +124,8 @@
               </li>
           @endif
 
-          <li class="nav-header">PENGATURAN</li>
           @if (auth()->user()->hasRole('admin'))
+          <li class="nav-header">PENGATURAN</li>
             <li class="nav-item">
               <a href="{{ route('setting.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-cog"></i>

@@ -71,9 +71,16 @@ function resetForm(selector) {
             $(`[name="${error}[]"]`).addClass('is-invalid');
             $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
                 .insertAfter($(`[name="${error}[]"]`).next());
-        } else {  
-          $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
-              .insertAfter($(`[name=${error}]`));
+        } else {
+          if ($(`[name=${error}]`).next().hasClass('input-group-append') || $(`[name=${error}]`).next().hasClass('input-group-prepend')) {
+            $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
+                .insertAfter($(`[name=${error}]`).next());
+            $('.input-group-append .input-group-text').css('border-radius', '0 .25rem .25rem 0');
+            $('.input-group-prepend').next().css('border-radius', '0.25rem .25rem 0');
+          } else {
+            $(`<span class="error invalid-feedback">${errors[error][0]}</span>`)
+                .insertAfter($(`[name=${error}]`));
+          }
         }
       }                           
     }

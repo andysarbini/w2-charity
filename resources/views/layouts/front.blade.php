@@ -228,7 +228,7 @@
             {{-- button --}}
             <div class="col-lg-2 action" style="white-space: nowrap;">
               <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-0">Donasi</a>
-              <a href="{{ route('campaigns.create') }}" class="btn btn-sm btn-light py-0 rounded-0">Galang Dana</a>
+              <a href="{{ url('/campaigns') }}" class="btn btn-sm btn-light py-0 rounded-0">Galang Dana</a>
             </div>
           </div>
         </div>
@@ -317,6 +317,9 @@
         </div>
       </div>
     </div>
+
+<x-toast />
+
     
     {{-- slim tidak bisa ajax --}}
     <!-- jQuery -->

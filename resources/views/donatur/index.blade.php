@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Project')
+@section('title', 'Donatur')
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item active">Projects</li>
+    <li class="breadcrumb-item active">Donatur</li>
 @endsection
 
 @section('content')
@@ -12,53 +12,18 @@
 
         <x-card>
           <x-slot name="header">
-            @if (auth()->user()->hasRole('admin'))
-              <button onclick="addForm(`{{ route('campaigns.store')}}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>
-            @else
-              <a href="{{ url('/campaigns') }}" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></a>
-            @endif
+            <button onclick="addForm(`{{ route('donatur.store') }}`)" class="btn btn-primary"><i class="fas fa-plus-circle"> Tambah</i></button>           
           </x-slot>
-
-          <div class="d-flex justify-content-between">
-            <div class="form-group">
-              <label for="status2">Status</label>
-              <select name="status2" id="status2" class="custom-select">
-                  <option value="" selected>All</option>
-                  <option value="Publish">Publish</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Archived">Archived</option>
-              </select>
-            </div>
-            <div class="d-flex">
-              <div class="form-group mx-3">
-                <label for="start_date2">Tanggal Awal:</label>
-                <div class="input-group datepicker" id="start_date2" data-target-input="nearest">
-                    <input type="text" name="start_date2" class="form-control datetimepicker-input" data-target="#start_date2"/>
-                    <div class="input-group-append" data-target="#start_date2" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="end_date2">Tanggal Akhir:</label>
-                <div class="input-group datepicker" id="end_date2" data-target-input="nearest">
-                    <input type="text" name="end_date2" class="form-control datetimepicker-input" data-target="#end_date2"/>
-                    <div class="input-group-append" data-target="#end_date2" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <x-table>
             <x-slot name="thead">
               <th width="5%">No</th>
               <th width="20%"></th>
-              <th>Deskripsi</th>
-              <th>Tgl. Publish</th>
-              <th>Status</th>
-              <th>Author</th>
+              <th>Nama</th>
+              <th>Tlp</th>
+              <th style="white-space: nowrap">Total Project</th>
+              <th style="white-space: nowrap">Total Donasi</th>
+              <th style="white-space: nowrap">Tgl. Gabung</th>              
               <th width="15%"><i class="fas fa-cog"></i></th>
             </x-slot>
 
@@ -73,16 +38,12 @@
    
    
 
-  @includeIf('campaign.form')
-  
+  @includeIf('donatur.form')
 
 @endsection
 
 <x-toast />
 @includeIf('includes.datatable')
-@includeIf('includes.select2')
-@includeIf('includes.summernote')
-@includeIf('includes.datepicker')
    
 @push('scripts')
     <script>
@@ -93,31 +54,20 @@
           processing: true,
           autoWidth: false,
           ajax: {
-            url: '{{ route('campaigns.data') }}',
-            data: function (d) {
-              d.status = $('[name=status2]').val();
-              d.start_date = $('[name=start_date2]').val();
-              d.end_date = $('[name=end_date2]').val();
-            }
+            url: '{{ route('donatur.data') }}',
+            
           },
           columns: [
             {data: 'DT_RowIndex', searchable: false, sortable: false},
             {data: 'path_image', searchable: false, sortable: false},
-            {data: 'short_description'},
-            {data: 'publish_date', searchable: false},
-            {data: 'status', searchable: false, sortable: false},
-            {data: 'author', searchable: false},
+            {data: 'name'},
+            {data: 'phone', searchable: false},
+            {data: 'campaigns_count', searchable: false, sortable: false},
+            {data: 'donations_sum_nominal', searchable: false},
+            {data: 'created_at', searchable: false},
             {data: 'actions', searchable: false, sortable: false},
           ]
         });
-
-      $('[name=status2]').on('change', function () {
-        table.ajax.reload();
-      });
-
-      $('.datepicker').on('change.datetimepicker', function () {
-        table.ajax.reload();
-      });
         
       function addForm(url, title = 'Tambah') {
         $(modal).modal('show');

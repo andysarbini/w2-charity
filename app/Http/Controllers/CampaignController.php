@@ -63,7 +63,7 @@ class CampaignController extends Controller
 
                     if (auth()->user()->hasRole('donatur')) {
                         $text .='
-                        <a href="'. route('campaigns.edit', $query->id) .'" class="btn btn-link text-primary"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="'. url('/campaigns/'. $query->id .'/edit') .'" class="btn btn-link text-primary"><i class="fas fa-pencil-alt"></i></a>
                         ';
                     } else {
                         $text .='
@@ -81,16 +81,7 @@ class CampaignController extends Controller
                 ->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $category = Category::orderBy('name')->get()->pluck('name', 'id');
-        return view('front.campaign.index', compact('category'));
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -147,7 +138,7 @@ class CampaignController extends Controller
     public function show(Request $request, Campaign $campaign)
     {
         if (! $request->ajax()) {
-            return view('campaign.detail', compact('campaign'));
+            return view('campaign.show', compact('campaign'));
         }
         
         $campaign->publish_date = date('Y-m-d H:i', strtotime($campaign->publish_date));
@@ -159,18 +150,7 @@ class CampaignController extends Controller
 
     }
 
-    /**
-     * Show edit form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $category = Category::orderBy('name')->get()->pluck('name', 'id');
-        $campaign = Campaign::findOrFail($id);
-
-        return view('front.campaign.index', compact('category', 'campaign'));
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -222,6 +202,28 @@ class CampaignController extends Controller
         $campaign->category_campaign()->sync($request->categories);
 
         return response()->json(['data'=>$campaign, 'message'=>'Project berhasil diperbarui']);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+
+        $validator = Validator::make($request->all(), ['status' => 'required|in:publish,archived,pending']);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $campaign = Campaign::findOrFail($id);
+        $campaign->update($request->only('status'));
+
+        $statusText = "";
+        if (($request->status) == 'publish') {
+            $statusText = 'dikonfirmasi';
+        } elseif ($request->status == 'archived') {
+            $statusText = 'diarsipkan';
+        }
+
+        return response()->json(['data'=>$campaign, 'message'=>'Project berhasil '. $statusText]);
     }
 
     /**

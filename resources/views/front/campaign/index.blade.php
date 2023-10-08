@@ -118,7 +118,7 @@
           resetForm(originalForm);
 
           setTimeout(() => {
-            document.location = '/campaigns';
+            document.location = '{{ route('campaigns.index') }}';
           }, 3000);
         })
         .fail(errors => {
